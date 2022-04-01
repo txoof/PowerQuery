@@ -21,10 +21,11 @@ PowerQuery Plugin for exporting the following information from PowerSchool &rarr
     - [Fields Provided & Used](#fields-provided--used-3)
     - [Data Export Manager Setup](#data-export-manager-setup-3)
     - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-3)
-  - [7 Users Teacher-Auditors Active](#7-users-teacher-auditors-active)
+  - [**DEPRICATED** 7 Users Teacher-Auditors Active](#depricated-7-users-teacher-auditors-active)
     - [Fields Provided & Used](#fields-provided--used-4)
     - [Data Export Manager Setup](#data-export-manager-setup-4)
     - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-4)
+  - [7 Users Teachers Additional Roles](#7-users-teachers-additional-roles)
   - [7 Users Students Inactive](#7-users-students-inactive)
     - [Fields Provided & Used](#fields-provided--used-5)
     - [Data Export Manager Setup](#data-export-manager-setup-5)
@@ -540,7 +541,9 @@ where TEACHERS.HOMESCHOOLID = TEACHERS.SCHOOLID
     ORDER BY TEACHERS.LAST_NAME ASC
 ```
 
-## 7 Users Teacher-Auditors Active
+## **DEPRICATED** 7 Users Teacher-Auditors Active
+
+**DO NOT USE THIS. This is not necessary; auditor relationships created in student queries are sufficient**
 
 All teachers that are memberts of the "Learner Support" auditors role. Teachers of EAL and Learning Support classes. These users are linked via the relationship field for students. These roles overwrite the "Instructor" roles.
 
@@ -669,6 +672,22 @@ select distinct
       end
 order by "last_name" asc
 ```
+
+## 7 Users Teachers Additional Roles
+Add additional roles such as Admin, Super Admin, etc.
+
+SQL SCRATCH:
+```SQL
+select
+U_SCHOOLSTAFFUSERFIELDS.BRIGHTSPACE_ACCOUNT_TYPE as BRIGHTSPACE_ACCOUNT_TYPE,
+    USERS.LASTFIRST as LASTFIRST 
+ from USERS USERS,
+    U_SCHOOLSTAFFUSERFIELDS U_SCHOOLSTAFFUSERFIELDS,
+    SCHOOLSTAFF SCHOOLSTAFF 
+ where SCHOOLSTAFF.DCID=U_SCHOOLSTAFFUSERFIELDS.SCHOOLSTAFFDCID
+    and SCHOOLSTAFF.USERS_DCID=USERS.DCID
+```
+
 
 ## 7 Users Students Inactive
 
