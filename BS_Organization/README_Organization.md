@@ -2,34 +2,35 @@
 
 PowerQuery Plugin for exporting the following information from PowerSchool &rarr; BrightSpace. This plugin creates the following exports:
 
-- [1 Other](#1-other)
-  - [Fields Provided & Used](#fields-provided--used)
-  - [Data Export Manager Setup](#data-export-manager-setup)
-  - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml)
-- [2 Departments](#2-departments)
-  - [Fields Provided & Used](#fields-provided--used-1)
-  - [Data Export Manager Setup](#data-export-manager-setup-1)
-  - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-1)
-- [3 Semesters](#3-semesters)
-  - [Fields Provided & Used](#fields-provided--used-2)
-  - [Data Export Manager Setup](#data-export-manager-setup-2)
-  - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-2)
-- [4 Templates](#4-templates)
-  - [Fields Provided & Used](#fields-provided--used-3)
-  - [Data Export Manager Setup](#data-export-manager-setup-3)
-  - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-3)
-- [5 Offerings](#5-offerings)
-  - [Fields Provided & Used](#fields-provided--used-4)
-  - [Data Export Manager Setup](#data-export-manager-setup-4)
-  - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-4)
-- [6 Sections](#6-sections)
-  - [Fields Provided & Used](#fields-provided--used-5)
-  - [Data Export Manager Setup](#data-export-manager-setup-5)
-  - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-5)
-- [template](#template)
-  - [Fields Provided & Used](#fields-provided--used-6)
-  - [Data Export Manager Setup](#data-export-manager-setup-6)
-  - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-6)
+- [BrightSpace D2L Organization Plugin](#brightspace-d2l-organization-plugin)
+  - [1 Other](#1-other)
+    - [Fields Provided & Used](#fields-provided--used)
+    - [Data Export Manager Setup](#data-export-manager-setup)
+    - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml)
+  - [2 Departments](#2-departments)
+    - [Fields Provided & Used](#fields-provided--used-1)
+    - [Data Export Manager Setup](#data-export-manager-setup-1)
+    - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-1)
+  - [3 Semesters](#3-semesters)
+    - [Fields Provided & Used](#fields-provided--used-2)
+    - [Data Export Manager Setup](#data-export-manager-setup-2)
+    - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-2)
+  - [4 Templates](#4-templates)
+    - [Fields Provided & Used](#fields-provided--used-3)
+    - [Data Export Manager Setup](#data-export-manager-setup-3)
+    - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-3)
+  - [5 Offerings](#5-offerings)
+    - [Fields Provided & Used](#fields-provided--used-4)
+    - [Data Export Manager Setup](#data-export-manager-setup-4)
+    - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-4)
+  - [6 Sections](#6-sections)
+    - [Fields Provided & Used](#fields-provided--used-5)
+    - [Data Export Manager Setup](#data-export-manager-setup-5)
+    - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-5)
+  - [template](#template)
+    - [Fields Provided & Used](#fields-provided--used-6)
+    - [Data Export Manager Setup](#data-export-manager-setup-6)
+    - [Query Setup for `named_queries.xml`](#query-setup-for-named_queriesxml-6)
 
 ## 1 Other
 
@@ -297,8 +298,47 @@ select distinct
 |-|
 |TERMS|
 
-**SQL Query**
+**SQL Query Proposed**
+```SQL
+select distinct
+  'semester' as "type",
+  'UPDATE' as "action",
+  'term_'||TERMS.ID as "code",
+--   TERMS.NAME as "name",
+  /*
+  This works, but I am concerned that this will potentially create confusion when new 
+  terms are created for scheduling in April/May each school year. 
 
+  Ideally the output will contain the current school year:
+  name: Q1 21/22; S1 22/23
+  */
+  TERMS.ABBREVIATION ||' '||
+  (CASE 
+    WHEN (EXTRACT(month from sysdate) >= 1 and EXTRACT(month from sysdate) <= 7)
+     THEN substr(to_char(extract(year from sysdate)-1), 3,2)||'/'||substr(to_char(extract(year from sysdate)), 3, 2)
+    WHEN (EXTRACT(month from sysdate) > 7 and EXTRACT(month from sysdate) <= 12)
+     THEN to_char(extract(year from sysdate))||'/'||to_char(extract(year from sysdate)+1)
+  END)
+    as "name",
+  '' as "start_date",
+  '' as "end_date",
+  '' as "is_active",
+  '' as "department_code",
+  '' as "template_code",
+  '' as "semester_code",
+  '' as "offering_code",
+'' as "custom_code"
+from TERMS TERMS 
+    where TERMS.YEARID = (CASE 
+    WHEN (EXTRACT(month from sysdate) >= 1 and EXTRACT(month from sysdate) <= 7)
+     THEN EXTRACT(year from sysdate)-2000+9
+    WHEN (EXTRACT(month from sysdate) > 7 and EXTRACT(month from sysdate) <= 12)
+     THEN EXTRACT(year from sysdate)-2000+10
+      END)
+order by "code" asc
+```
+
+** SQL Query Current**
 ```SQL
 select distinct
   'semester' as "type",
