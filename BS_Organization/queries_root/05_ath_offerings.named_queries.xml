@@ -6,8 +6,8 @@
         <!--number of columns here must match number sql returns-->
         <columns>
             <column column="STUDENTS.ID">type</column> <!-- for columns not in database use a core filed-->
-            <column column="STUDENTS.ID">type</column> <!-- for columns not in database use a core filed-->
-            <column column="STUDENTS.ID">type</column> <!-- for columns not in database use a core filed-->
+            <column column="STUDENTS.ID">action</column> <!-- for columns not in database use a core filed-->
+            <column column="STUDENTS.ID">activity</column> <!-- for columns not in database use a core filed-->
          </columns>
         <!--SQL query in format <![CDATA[QUERY]]>-->
         <sql>
@@ -16,7 +16,7 @@
                 -- Students.LastFirst,
                 'course offering' as "type",
                 'UPDATE' as "action",
-                Gen.Name AS Activity
+                Gen.Name AS "Activity"
                 -- PS_CustomFields.GetStudentsCF(Students.ID,Gen.Value) AS Enrolled_in_Activity
                 -- STUDENTS.STUDENT_NUMBER as child_code,
                 /* REGEXP_REPLACE(U_STUDENTSUSERFIELDS.EMAILSTUDENT, '(^.*)(@.*)',
