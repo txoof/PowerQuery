@@ -629,7 +629,7 @@ order by "semester code" desc
 SELECT distinct
     'course offering' as "type",
     'UPDATE' as "action",
-    'co_athl_'||Gen.Name AS "code",
+    'co_ath_'||Gen.Name AS "code",
     Gen.Name as "name",
     '' as "start_date",
     '' as "end_date",
