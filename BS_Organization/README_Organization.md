@@ -476,7 +476,7 @@ select distinct
 
 **Export Summary and Output Options**
 
-- *Export File Name:* `5-Offerings-%d.csv`
+- *Export File Name:* `5-Offerings_500-%d.csv`
 - *Line Delimiter:* `CR-LF`
 - *Field Delimiter:* `,`
 - *Character Set:* `UTF-8`
@@ -589,7 +589,7 @@ order by "semester code" desc
 
 **Export Summary and Output Options**
 
-- *Export File Name:* `5-Offerings_Ath-%d.csv`
+- *Export File Name:* `5-Offerings_501_Ath-%d.csv`
 - *Line Delimiter:* `CR-LF`
 - *Field Delimiter:* `,`
 - *Character Set:* `UTF-8`
@@ -599,18 +599,18 @@ order by "semester code" desc
 ### Query Setup for `named_queries.xml`
 | header | table.field | value | NOTE |
 |-|-|-|-|
-|type| STUDENTS.ID | _course offering_ | N1
-|action| STUDENTS.ID | _UPDATE_ | N1
-|code| STUDENTS.ID | _co\_ath\_Athletics - Baseball - MS_
-|name| STUDENTS.ID | _IT Programming_ 
-|start_date| STUDENTS.ID | '' | N1
-|end_date| STUDENTS.ID | '' | N1
-|is_active| STUDENTS.ID | _0_ | N1
-|department_code| STUDENTS.ID | '' | N1
-|template_code| STUDENTS.ID | '' | N1
-|semester_code| STUDENTS.ID | _term_3100_ 
-|offering_code| STUDENTS.ID | '' | N1
-|custom_code| STUDENTS.ID | '' | N1
+|type| GEN.ID | _course offering_ | N1
+|action| GEN.ID | _UPDATE_ | N1
+|code| GEN.name | _co\_ath\_Athletics - Baseball - MS_
+|name| GEN.name | _Athletics - Baseball - MS_ 
+|start_date| GEN.ID | '' | N1
+|end_date| GEN.ID | '' | N1
+|is_active| GEN.ID | _0_ | N1
+|department_code| GEN.ID | '' | N1
+|template_code| GEN.ID | '' | N1
+|semester_code| GEN.ID | _term\_ATH_ | N1 
+|offering_code| GEN.ID | '' | N1
+|custom_code| GEN.ID | '' | N1
 
 **NOTES**
 
@@ -637,16 +637,10 @@ SELECT distinct
     '' as "department_code",
     'Templ_ath' as "template_code",
     /*
-    Need to find a sustainable way of pulling year code e.g. 3100, 3200
-    
-    One option is to use the ugly date hack, but that will likely cause some confusion
-    
-    Ultimately it should appear as:
-    term_3100, term_3200, term_3300, etc.
-    
-    
+    Athletics classes will not be tied to a term -- all classes
+    will run indefinitely
     */
-    'term_' as "semester_code",
+    'term_ATH' as "semester_code",
     '' as "offering_code",
     '' as "custom_code"
 
@@ -660,7 +654,6 @@ SELECT distinct
       AND PS_CustomFields.GetStudentsCF(Students.ID,Gen.Value) >=1
       AND Gen.Name LIKE '%Athletics - %'
   ORDER BY
-      -- Students.LastFirst,
       Gen.Name
 ```
 
