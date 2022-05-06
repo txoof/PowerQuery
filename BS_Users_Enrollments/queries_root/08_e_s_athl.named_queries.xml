@@ -20,6 +20,7 @@
                 'S_'||STUDENTS.STUDENT_NUMBER as "child_code",
                 'Learner' as "role_name",
                 'co_ath_'||Gen.Name AS "parent_code"
+
             FROM
                 Students
                 JOIN Gen ON Gen.cat='activity'
@@ -29,8 +30,6 @@
                 AND PS_CustomFields.GetStudentsCF(Students.ID,Gen.Value) IS NOT NULL
                 AND PS_CustomFields.GetStudentsCF(Students.ID,Gen.Value) >=1
                 AND Gen.Name LIKE '%Athletics - %'
-            ORDER BY
-                STUDENTS.STUDENT_NUMBER ASC
             ]]>
         </sql>
     </query>
