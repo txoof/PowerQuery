@@ -1394,7 +1394,7 @@ select distinct
 ### Data Export Manager Setup
 
 - **Category:** Show All
-- **Export From:**  `NQ com.txoof.brightspace.enroll.08_students`
+- **Export From:**  `NQ com.txoof.brightspace.enroll.08_800_students`
 
 **Labels Used on Export**
 
@@ -1523,7 +1523,7 @@ select
 
 **Export Summary and Output Options**
 
-- *Export File Name:* `8-Enrollments_students-%d.csv`
+- *Export File Name:* `8-Enrollments_801_students_athletics-%d.csv`
 - *Line Delimiter:* `CR-LF`
 - *Field Delimiter:* `,`
 - *Character Set:* `UTF-8`
@@ -1537,11 +1537,11 @@ select
 | header | table.field | value | NOTE |
 |-|-|-|-|
 |-|-|-|-|
-|type| CC.ID | _enrollment_ | N1
-|action| CC.ID | _UPDATE_ | N1
+|type| STUDENTS.ID | _enrollment_ | N1
+|action| STUDENTS.ID | _UPDATE_ | N1
 |child_code| `S_`_`STUDENTS.STUDENT_NUMBER`_ | _S\_506113_
-|role_name| CC.ID | _Learner_ | N1
-|parent_code| `cs_`_`cc.schoolid`_`_`_`cc.course_number`_`_`_`cc.termid`_ | _cs_2_E0DNS_3100_ 
+|role_name| STUDENTS.ID | _Learner_ | N1
+|parent_code| _`co_athl`\_`GEN.NAME`_ | _co\_ath\_Athletics - Baseball - MS_
 
 **NOTES**
 
@@ -1576,7 +1576,7 @@ SELECT distinct
       AND PS_CustomFields.GetStudentsCF(Students.ID,Gen.Value) >=1
       AND Gen.Name LIKE '%Athletics - %'
   ORDER BY
-      -- Students.LastFirst,
+      Students.LastFirst,
       Gen.Name
 ```
 
